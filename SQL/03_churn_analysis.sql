@@ -100,7 +100,6 @@ order by churn_rate_percentage desc;
 -- 7 Churn analysis by online security
 select OnlineSecurity,
 count(*) as total_customers,
-count(*) as total_customers,
 SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
         AS churned_customers,
     ROUND(
@@ -157,7 +156,7 @@ round(sum(case when replace(Churn, char(13), '') = 'Yes'
       group by Contract
       order by churn_rate_percentage desc;
 
-  -- 11 Rank contract types by churn rates
+-- 11 Rank contract types by churn rates
 With contract_churn as (
 select Contract,
 count(*) as total_customers,
@@ -181,6 +180,29 @@ select
     from contract_churn
     order by churn_rate_rank;
 
+
+-- 12 Customer retention priority by contract
+select 
+    contract,
+    count(*) as total_customers,
+    SUM(REPLACE(Churn, CHAR(13), '') = 'Yes') AS churned_customers,
+    ROUND(
+        SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        * 100.0 / COUNT(*),
+        2
+    ) as churn_rate_percentage,
+    case 
+        when SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        * 100.0 / COUNT(*) >= 30 
+            then "High Priority"
+        when SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        * 100.0 / COUNT(*) >= 10 
+            then "Medium Priority"
+        else "Low Priority"
+    end as retention_priority
+from customer_churn_analysis_raw
+group by Contract
+order by churn_rate_percentage desc;
 
 
 -- BUSINESS INSIGHTS
