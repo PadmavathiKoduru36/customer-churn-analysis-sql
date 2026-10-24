@@ -1,0 +1,13 @@
+
+# Temporary files
+*.log
+*.tmp
+Thumbs.db
+.DS_Store
+
+# Editor settings
+.vscode/
+
+# Local database exports and credentials
+*.sql.bak
+.env
