@@ -157,6 +157,30 @@ round(sum(case when replace(Churn, char(13), '') = 'Yes'
       group by Contract
       order by churn_rate_percentage desc;
 
+  -- 11 Rank contract types by churn rates
+With contract_churn as (
+select Contract,
+count(*) as total_customers,
+SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        AS churned_customers,
+    ROUND(
+        SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        * 100.0 / COUNT(*),
+        2
+    )
+as churn_rate_percentage
+from customer_churn_analysis_raw
+group by Contract    
+) 
+select 
+    Contract,
+    total_customers,
+    churned_customers,
+    churn_rate_percentage,
+    dense_rank() over(order by churn_rate_percentage desc) as churn_rate_rank
+    from contract_churn
+    order by churn_rate_rank;
+
 
 
 -- BUSINESS INSIGHTS
