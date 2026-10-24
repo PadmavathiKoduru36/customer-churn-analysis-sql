@@ -88,6 +88,15 @@ The findings from the analysis will help identify customer segments with higher 
 4. Run the SQL scripts in the `sql/` folder in numerical order.
 5. Review the result grids to understand the churn patterns.
 
+## 📸 Project Screenshots
+
+### Customer Churn by Contract
+
+This analysis compares customer churn across month-to-month, one-year, and two-year contracts. Month-to-month customers have the highest churn rate.
+
+![Contract Churn Analysis](Screenshots/contract_churn_analysis.png)
+
+
 ## Author
 Padmavathi Koduru
 
