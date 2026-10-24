@@ -67,6 +67,97 @@ from customer_churn_analysis_raw
 group by charge_group
 order by churn_rate_percentage desc;
 
+-- 5 Churn analysis by payment method
+select PaymentMethod,
+count(*) as total_customers,
+SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        AS churned_customers,
+    ROUND(
+        SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        * 100.0 / COUNT(*),
+        2
+    )
+as churn_rate_percentage
+from customer_churn_analysis_raw
+group by PaymentMethod
+order by churn_rate_percentage desc;
+
+-- 6 Churn analysis by internet service
+select InternetService,
+count(*) as total_customers,
+SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        AS churned_customers,
+    ROUND(
+        SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        * 100.0 / COUNT(*),
+        2
+    )
+as churn_rate_percentage
+from customer_churn_analysis_raw
+group by InternetService
+order by churn_rate_percentage desc;
+
+-- 7 Churn analysis by online security
+select OnlineSecurity,
+count(*) as total_customers,
+count(*) as total_customers,
+SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        AS churned_customers,
+    ROUND(
+        SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        * 100.0 / COUNT(*),
+        2
+    )
+as churn_rate_percentage
+from customer_churn_analysis_raw
+group by OnlineSecurity
+order by churn_rate_percentage desc;
+
+
+-- 8 Churn analysis by tech support
+select TechSupport,
+count(*) as total_customers,
+SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        AS churned_customers,
+    ROUND(
+        SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        * 100.0 / COUNT(*),
+        2
+    )
+as churn_rate_percentage
+from customer_churn_analysis_raw
+group by TechSupport
+order by churn_rate_percentage desc;
+
+-- 9 Monthly charges associated with churned customers
+SELECT
+count(*) as churned_customers,
+round(sum(MonthlyCharges),2) as monthly_charges_at_risk,
+round(avg(MonthlyCharges),2) as average_monthly_charges,
+round(sum(MonthlyCharges) * 12,2) as annualized_charges_at_risk
+from customer_churn_analysis_raw
+where replace(Churn, char(13), '') = 'Yes';
+
+-- 10 Business Summary: Churn analysis by Contract
+select Contract,
+count(*) as total_customers,
+SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        AS churned_customers,
+    ROUND(
+        SUM(REPLACE(Churn, CHAR(13), '') = 'Yes')
+        * 100.0 / COUNT(*),
+        2
+    )
+as churn_rate_percentage,
+round(sum(case when replace(Churn, char(13), '') = 'Yes'
+      then monthlycharges
+      else 0
+      end),2) as monthly_charges_from_churned_customers
+      from customer_churn_analysis_raw
+      group by Contract
+      order by churn_rate_percentage desc;
+
+
 
 -- BUSINESS INSIGHTS
 -- 1. Overall churn rate is approximately 26.54%.
